@@ -62,7 +62,13 @@
   * {
     @apply border-border;
   }
+  html {
+    scroll-behavior: smooth;
+  }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-slate-950 text-slate-100;
+  }
+  ::selection {
+    @apply bg-cyan-300 text-slate-950;
   }
 }
