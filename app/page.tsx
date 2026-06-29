@@ -4,8 +4,8 @@ import { Button } from "@/components/ui/button";
 import { BlogCard } from "@/components/site/blog-card";
 import { EmptyState, PageFrame, SiteFooter, SiteHeader } from "@/components/site/site-shell";
 import { ProjectCard } from "@/components/site/project-card";
-import { getDictionary } from "@/lib/i18n";
-import { absoluteUrl } from "@/lib/portfolio/format";
+import { getDictionary, getLocale } from "@/lib/i18n";
+import { absoluteUrl, localizedText } from "@/lib/portfolio/format";
 import {
   getFeaturedProjects,
   getLatestPosts,
@@ -17,8 +17,9 @@ import {
 export const dynamic = "force-dynamic";
 
 export default async function Home() {
-  const [t, profile, projects, posts, skills] = await Promise.all([
+  const [t, locale, profile, projects, posts, skills] = await Promise.all([
     getDictionary(),
+    getLocale(),
     getSiteProfile(),
     getFeaturedProjects(),
     getLatestPosts(3),
@@ -26,6 +27,9 @@ export default async function Home() {
   ]);
   const groupedSkills = splitSkills(skills);
   const avatarUrl = absoluteUrl(profile?.avatar_url);
+  const fullName = localizedText(profile, "full_name", locale) ?? t.home.fallbackName;
+  const headline = localizedText(profile, "headline", locale) ?? t.home.fallbackHeadline;
+  const bio = localizedText(profile, "bio", locale);
 
   return (
     <main className="min-h-screen bg-[radial-gradient(circle_at_top_left,rgba(34,211,238,0.18),transparent_35%),radial-gradient(circle_at_top_right,rgba(139,92,246,0.16),transparent_30%),#020617]">
@@ -35,14 +39,14 @@ export default async function Home() {
           <div>
             <p className="text-sm uppercase tracking-[0.3em] text-cyan-300">{t.home.eyebrow}</p>
             <h1 className="mt-5 text-4xl font-semibold text-white md:text-6xl">
-              {profile?.full_name ?? t.home.fallbackName}
+              {fullName}
             </h1>
             <p className="mt-5 max-w-2xl text-xl leading-8 text-slate-200">
-              {profile?.headline ?? t.home.fallbackHeadline}
+              {headline}
             </p>
-            {profile?.bio && (
+            {bio && (
               <p className="mt-5 max-w-2xl whitespace-pre-line leading-7 text-slate-400">
-                {profile.bio}
+                {bio}
               </p>
             )}
             <div className="mt-8 flex flex-wrap gap-3">
@@ -61,7 +65,7 @@ export default async function Home() {
             <div className="absolute inset-0 rounded-lg bg-gradient-to-br from-cyan-400/30 via-blue-500/20 to-violet-500/30 blur-2xl" />
             <div className="relative rounded-lg border border-white/10 bg-white/[0.06] p-4 shadow-2xl backdrop-blur">
               {avatarUrl ? (
-                <img src={avatarUrl} alt={profile?.full_name ?? ""} className="aspect-square w-full rounded-md object-cover" />
+                <img src={avatarUrl} alt={fullName} className="aspect-square w-full rounded-md object-cover" />
               ) : (
                 <div className="flex aspect-square w-full items-center justify-center rounded-md bg-slate-900 text-center text-slate-400">
                   {t.home.avatarHint}
@@ -114,8 +118,8 @@ export default async function Home() {
             <p className="text-sm uppercase tracking-[0.25em] text-cyan-300">{t.home.skillsEyebrow}</p>
             <h2 className="mt-2 text-2xl font-semibold text-white">{t.home.skillsTitle}</h2>
             <div className="mt-6 grid gap-5 md:grid-cols-2">
-              <SkillPreview title={t.home.hardSkills} skills={groupedSkills.hard} empty={t.home.noSkills} />
-              <SkillPreview title={t.home.softSkills} skills={groupedSkills.soft} empty={t.home.noSkills} />
+              <SkillPreview title={t.home.hardSkills} skills={groupedSkills[0]} locale={locale} empty={t.home.noSkills} />
+              <SkillPreview title={t.home.softSkills} skills={groupedSkills[1]} locale={locale} empty={t.home.noSkills} />
             </div>
           </div>
         </section>
@@ -128,10 +132,12 @@ export default async function Home() {
 function SkillPreview({
   title,
   skills,
+  locale,
   empty,
 }: {
   title: string;
-  skills: { id: string; name: string }[];
+  skills: { id: string; name: string; name_vi?: string | null; name_en?: string | null }[];
+  locale: "vi" | "en";
   empty: string;
 }) {
   return (
@@ -140,7 +146,7 @@ function SkillPreview({
       <div className="mt-3 flex flex-wrap gap-2">
         {skills.slice(0, 10).map((skill) => (
           <span key={skill.id} className="rounded-full bg-white/10 px-3 py-1 text-sm text-slate-200">
-            {skill.name}
+            {localizedText(skill, "name", locale) ?? skill.name}
           </span>
         ))}
         {!skills.length && <p className="text-sm text-slate-400">{empty}</p>}

@@ -8,9 +8,10 @@ export async function BlogForm({ post }: { post?: BlogPost | null }) {
   const action = post ? updatePost.bind(null, post.id) : createPost;
 
   return (
-    <form action={action} className="grid gap-4">
+    <form action={action} className="grid gap-6">
       <div className="grid gap-4 md:grid-cols-2">
-        <Field name="title" label={t.admin.fields.title} required defaultValue={post?.title} />
+        <Field name="title_vi" label={`${t.admin.fields.title} (VI)`} required defaultValue={post?.title_vi ?? post?.title} />
+        <Field name="title_en" label={`${t.admin.fields.title} (EN)`} required defaultValue={post?.title_en ?? post?.title} />
         <Field name="slug" label={t.admin.fields.slug} defaultValue={post?.slug} />
         <Field name="cover_image_url" label={t.admin.fields.coverImageUrl} defaultValue={post?.cover_image_url} />
         <Field name="published_at" label={t.admin.fields.publishedAt} type="datetime-local" defaultValue={toDateInput(post?.published_at)} />
@@ -26,9 +27,14 @@ export async function BlogForm({ post }: { post?: BlogPost | null }) {
           <option value="published">published</option>
         </select>
       </label>
-      <TextArea name="excerpt" label={t.admin.fields.excerpt} rows={3} defaultValue={post?.excerpt} />
-      <TextArea name="tags" label={`${t.admin.fields.tags} (${t.admin.hints.list})`} rows={3} defaultValue={post?.tags?.join("\n")} />
-      <TextArea name="content" label={t.admin.fields.content} rows={18} defaultValue={post?.content} />
+      <div className="grid gap-4 md:grid-cols-2">
+        <TextArea name="excerpt_vi" label={`${t.admin.fields.excerpt} (VI)`} rows={3} defaultValue={post?.excerpt_vi ?? post?.excerpt} />
+        <TextArea name="excerpt_en" label={`${t.admin.fields.excerpt} (EN)`} rows={3} defaultValue={post?.excerpt_en ?? post?.excerpt} />
+        <TextArea name="tags_vi" label={`${t.admin.fields.tags} (VI, ${t.admin.hints.list})`} rows={3} defaultValue={(post?.tags_vi ?? post?.tags)?.join("\n")} />
+        <TextArea name="tags_en" label={`${t.admin.fields.tags} (EN, ${t.admin.hints.list})`} rows={3} defaultValue={(post?.tags_en ?? post?.tags)?.join("\n")} />
+        <TextArea name="content_vi" label={`${t.admin.fields.content} (VI)`} rows={18} defaultValue={post?.content_vi ?? post?.content} />
+        <TextArea name="content_en" label={`${t.admin.fields.content} (EN)`} rows={18} defaultValue={post?.content_en ?? post?.content} />
+      </div>
       <Button className="w-fit bg-cyan-400 text-slate-950 hover:bg-cyan-300">
         {post ? t.admin.updatePost : t.admin.createPost}
       </Button>

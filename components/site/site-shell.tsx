@@ -2,12 +2,13 @@ import Link from "next/link";
 import { ThemeSwitcher } from "@/components/theme-switcher";
 import { LanguageSwitcher } from "@/components/language-switcher";
 import { Button } from "@/components/ui/button";
-import { absoluteUrl } from "@/lib/portfolio/format";
+import { absoluteUrl, localizedText } from "@/lib/portfolio/format";
 import { getDictionary, getLocale } from "@/lib/i18n";
 import type { SiteProfile } from "@/lib/portfolio/types";
 
 export async function SiteHeader({ profile }: { profile?: SiteProfile | null }) {
   const [t, locale] = await Promise.all([getDictionary(), getLocale()]);
+  const displayName = localizedText(profile, "full_name", locale) ?? t.common.portfolio;
   const navItems = [
     { href: "/", label: t.nav.home },
     { href: "/projects", label: t.nav.projects },
@@ -19,7 +20,7 @@ export async function SiteHeader({ profile }: { profile?: SiteProfile | null }) 
     <header className="sticky top-0 z-40 border-b border-white/10 bg-slate-950/80 backdrop-blur-xl">
       <div className="mx-auto flex min-h-16 w-full max-w-6xl flex-wrap items-center justify-between gap-3 px-4 py-3">
         <Link href="/" className="text-sm font-semibold text-white transition hover:text-cyan-300">
-          {profile?.full_name ?? t.common.portfolio}
+          {displayName}
         </Link>
         <nav className="order-3 flex w-full items-center gap-1 overflow-x-auto md:order-none md:w-auto">
           {navItems.map((item) => (
@@ -38,14 +39,15 @@ export async function SiteHeader({ profile }: { profile?: SiteProfile | null }) 
 }
 
 export async function SiteFooter({ profile }: { profile?: SiteProfile | null }) {
-  const t = await getDictionary();
+  const [t, locale] = await Promise.all([getDictionary(), getLocale()]);
+  const displayName = localizedText(profile, "full_name", locale) ?? t.common.portfolio;
   const githubUrl = absoluteUrl(profile?.github_url);
   const linkedinUrl = absoluteUrl(profile?.linkedin_url);
 
   return (
     <footer className="border-t border-white/10 bg-slate-950">
       <div className="mx-auto flex w-full max-w-6xl flex-col gap-3 px-4 py-8 text-sm text-slate-400 md:flex-row md:items-center md:justify-between">
-        <p>© {new Date().getFullYear()} {profile?.full_name ?? t.common.portfolio}</p>
+        <p>© {new Date().getFullYear()} {displayName}</p>
         <div className="flex flex-wrap gap-4">
           {githubUrl && (
             <a className="transition hover:text-cyan-300" href={githubUrl} target="_blank" rel="noreferrer">

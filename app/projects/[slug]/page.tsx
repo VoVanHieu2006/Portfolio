@@ -3,8 +3,8 @@ import { notFound } from "next/navigation";
 import { ArrowLeft, ExternalLink, Github } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PageFrame, SiteFooter, SiteHeader } from "@/components/site/site-shell";
-import { getDictionary } from "@/lib/i18n";
-import { absoluteUrl } from "@/lib/portfolio/format";
+import { getDictionary, getLocale } from "@/lib/i18n";
+import { absoluteUrl, localizedList, localizedText } from "@/lib/portfolio/format";
 import { getPublishedProjectBySlug, getSiteProfile } from "@/lib/portfolio/queries";
 
 export const dynamic = "force-dynamic";
@@ -15,8 +15,9 @@ export default async function ProjectDetailPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const [t, profile, project] = await Promise.all([
+  const [t, locale, profile, project] = await Promise.all([
     getDictionary(),
+    getLocale(),
     getSiteProfile(),
     getPublishedProjectBySlug(slug),
   ]);
@@ -28,6 +29,13 @@ export default async function ProjectDetailPage({
   const githubUrl = absoluteUrl(project.github_url);
   const demoUrl = absoluteUrl(project.demo_url);
   const coverUrl = absoluteUrl(project.cover_image_url);
+  const title = localizedText(project, "title", locale) ?? project.title;
+  const shortDescription = localizedText(project, "short_description", locale);
+  const problem = localizedText(project, "problem", locale);
+  const solution = localizedText(project, "solution", locale);
+  const role = localizedText(project, "my_role", locale);
+  const lessons = localizedText(project, "lessons_learned", locale);
+  const keyFeatures = localizedList(project, "key_features", locale);
 
   return (
     <main className="min-h-screen bg-slate-950">
@@ -40,10 +48,10 @@ export default async function ProjectDetailPage({
           <div className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr]">
             <div>
               <p className="text-sm uppercase tracking-[0.25em] text-cyan-300">{t.projects.eyebrow}</p>
-              <h1 className="mt-4 text-4xl font-semibold leading-tight text-white">{project.title}</h1>
-              {project.short_description && (
+              <h1 className="mt-4 text-4xl font-semibold leading-tight text-white">{title}</h1>
+              {shortDescription && (
                 <p className="mt-5 whitespace-pre-line text-lg leading-8 text-slate-300">
-                  {project.short_description}
+                  {shortDescription}
                 </p>
               )}
               <div className="mt-6 flex flex-wrap gap-2">
@@ -65,15 +73,15 @@ export default async function ProjectDetailPage({
           </div>
 
           <div className="mt-12 grid gap-5 md:grid-cols-2">
-            <DetailBlock title={t.projects.problem} value={project.problem} />
-            <DetailBlock title={t.projects.solution} value={project.solution} />
-            <DetailBlock title={t.projects.role} value={project.my_role} />
-            <DetailBlock title={t.projects.lessons} value={project.lessons_learned} />
+            <DetailBlock title={t.projects.problem} value={problem} />
+            <DetailBlock title={t.projects.solution} value={solution} />
+            <DetailBlock title={t.projects.role} value={role} />
+            <DetailBlock title={t.projects.lessons} value={lessons} />
           </div>
 
           <div className="mt-5 grid gap-5 md:grid-cols-2">
             <ListBlock title={t.projects.techStack} items={project.tech_stack ?? []} />
-            <ListBlock title={t.projects.features} items={project.key_features ?? []} />
+            <ListBlock title={t.projects.features} items={keyFeatures} />
           </div>
         </article>
       </PageFrame>

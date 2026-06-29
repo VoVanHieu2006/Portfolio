@@ -7,6 +7,9 @@ import { Suspense } from "react";
 
 async function UserDetails() {
   const supabase = await createClient();
+  if (!supabase) {
+    redirect("/auth/login");
+  }
   const { data, error } = await supabase.auth.getClaims();
 
   if (error || !data?.claims) {
@@ -41,3 +44,4 @@ export default function ProtectedPage() {
     </div>
   );
 }
+

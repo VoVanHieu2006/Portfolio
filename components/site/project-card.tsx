@@ -1,15 +1,17 @@
 import Link from "next/link";
 import { ArrowRight, ExternalLink, Github } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { absoluteUrl } from "@/lib/portfolio/format";
-import { getDictionary } from "@/lib/i18n";
+import { absoluteUrl, localizedText } from "@/lib/portfolio/format";
+import { getDictionary, getLocale } from "@/lib/i18n";
 import type { Project } from "@/lib/portfolio/types";
 
 export async function ProjectCard({ project }: { project: Project }) {
-  const t = await getDictionary();
+  const [t, locale] = await Promise.all([getDictionary(), getLocale()]);
   const githubUrl = absoluteUrl(project.github_url);
   const demoUrl = absoluteUrl(project.demo_url);
   const coverUrl = absoluteUrl(project.cover_image_url);
+  const title = localizedText(project, "title", locale) ?? project.title;
+  const shortDescription = localizedText(project, "short_description", locale);
 
   return (
     <article className="group rounded-lg border border-white/10 bg-slate-900/70 p-5 shadow-2xl shadow-cyan-950/20 backdrop-blur transition duration-300 hover:-translate-y-1 hover:border-cyan-300/50">
@@ -26,17 +28,17 @@ export async function ProjectCard({ project }: { project: Project }) {
         <div>
           <h3 className="text-xl font-semibold text-white">
             <Link href={`/projects/${project.slug}`} className="transition hover:text-cyan-300">
-              {project.title}
+              {title}
             </Link>
           </h3>
-          {project.short_description && (
+          {shortDescription && (
             <p className="mt-2 whitespace-pre-line text-sm leading-6 text-slate-300">
-              {project.short_description}
+              {shortDescription}
             </p>
           )}
         </div>
         {project.featured && (
-          <span className="rounded-full border border-cyan-300/40 px-2 py-1 text-xs text-cyan-200">
+          <span className="inline-flex min-h-6 items-center justify-center rounded-full border border-cyan-300/40 px-3 py-1 text-center text-xs leading-none text-cyan-200">
             {t.projects.featured}
           </span>
         )}

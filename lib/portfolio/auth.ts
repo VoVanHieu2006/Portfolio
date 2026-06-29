@@ -3,6 +3,9 @@ import { createClient } from "@/lib/supabase/server";
 
 export async function getCurrentUserClaims() {
   const supabase = await createClient();
+  if (!supabase) {
+    return null;
+  }
   const { data, error } = await supabase.auth.getClaims();
 
   if (error || !data?.claims) {
@@ -20,6 +23,9 @@ export async function isAdminUser() {
   }
 
   const supabase = await createClient();
+  if (!supabase) {
+    return false;
+  }
   const { data, error } = await supabase
     .from("admin_profiles")
     .select("user_id")

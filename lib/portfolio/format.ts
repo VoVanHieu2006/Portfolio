@@ -90,3 +90,47 @@ export function normalizeSkillGroup(category: string | null | undefined) {
 
   return "hard" as const;
 }
+
+type LocalizedRecord = Record<string, unknown>;
+
+export function localizedText(
+  record: LocalizedRecord | null | undefined,
+  key: string,
+  locale: Locale,
+) {
+  if (!record) {
+    return null;
+  }
+
+  const localized = record[`${key}_${locale}`];
+  const fallback = record[key];
+
+  return typeof localized === "string" && localized.trim()
+    ? localized
+    : typeof fallback === "string" && fallback.trim()
+      ? fallback
+      : null;
+}
+
+export function localizedList(
+  record: LocalizedRecord | null | undefined,
+  key: string,
+  locale: Locale,
+) {
+  if (!record) {
+    return [];
+  }
+
+  const localized = record[`${key}_${locale}`];
+  const fallback = record[key];
+
+  if (Array.isArray(localized) && localized.length) {
+    return localized.filter((item): item is string => typeof item === "string" && Boolean(item.trim()));
+  }
+
+  if (Array.isArray(fallback)) {
+    return fallback.filter((item): item is string => typeof item === "string" && Boolean(item.trim()));
+  }
+
+  return [];
+}
