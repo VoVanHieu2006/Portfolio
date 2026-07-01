@@ -13,8 +13,17 @@ export async function BlogCard({ post }: { post: BlogPost }) {
   return (
     <article className="group overflow-hidden rounded-lg border border-white/10 bg-white/[0.04] backdrop-blur transition duration-300 hover:-translate-y-1 hover:border-violet-300/40">
       {coverUrl && (
-        <Link href={`/blog/${post.slug}`} className="block overflow-hidden">
-          <img src={coverUrl} alt="" className="aspect-video w-full object-cover transition duration-500 group-hover:scale-105" />
+        <Link href={`/blog/${post.slug}`} className="block overflow-hidden relative aspect-video w-full bg-slate-950">
+          <img
+            src={coverUrl}
+            alt=""
+            className="absolute inset-0 h-full w-full object-cover blur-md opacity-40 scale-110"
+          />
+          <img
+            src={coverUrl}
+            alt=""
+            className="relative h-full w-full object-contain object-center transition duration-500 group-hover:scale-105"
+          />
         </Link>
       )}
       <div className="p-5">

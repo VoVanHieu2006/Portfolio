@@ -1,11 +1,12 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, ExternalLink, Github } from "lucide-react";
+import { ArrowLeft, ExternalLink, Github, Link2, BookOpen, Globe, Code } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PageFrame, SiteFooter, SiteHeader } from "@/components/site/site-shell";
 import { getDictionary, getLocale } from "@/lib/i18n";
 import { absoluteUrl, localizedList, localizedText } from "@/lib/portfolio/format";
 import { getPublishedProjectBySlug, getSiteProfile } from "@/lib/portfolio/queries";
+import type { ProjectLink } from "@/lib/portfolio/types";
 
 export const dynamic = "force-dynamic";
 
@@ -66,9 +67,44 @@ export default async function ProjectDetailPage({
                   </Button>
                 )}
               </div>
+              {project.links && project.links.length > 0 && (
+                <div className="mt-4 flex flex-wrap gap-2">
+                  {project.links.map((link: ProjectLink, index: number) => {
+                    const url = absoluteUrl(link.url);
+                    const label = localizedText({ ...link, label: link.label || '' }, "label", locale) ?? link.label ?? "";
+                    const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
+                      github: Github,
+                      "link2": Link2,
+                      "book-open": BookOpen,
+                      globe: Globe,
+                      code: Code,
+                      external: ExternalLink,
+                    };
+                    const Icon = iconMap[link.icon || "link2"] || Link2;
+                    return (
+                      <Button asChild key={index} variant="outline" className="border-white/10 bg-transparent text-white">
+                        <a href={url ?? undefined} target="_blank" rel="noreferrer">
+                          <Icon /> {label}
+                        </a>
+                      </Button>
+                    );
+                  })}
+                </div>
+              )}
             </div>
             {coverUrl && (
-              <img src={coverUrl} alt="" className="aspect-video w-full rounded-lg border border-white/10 object-cover" />
+              <div className="relative aspect-video w-full overflow-hidden rounded-lg border border-white/10 bg-slate-950">
+                <img
+                  src={coverUrl}
+                  alt=""
+                  className="absolute inset-0 h-full w-full object-cover blur-md opacity-40 scale-110"
+                />
+                <img
+                  src={coverUrl}
+                  alt=""
+                  className="relative h-full w-full object-contain object-center"
+                />
+              </div>
             )}
           </div>
 

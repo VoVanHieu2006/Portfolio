@@ -1,9 +1,9 @@
 import Link from "next/link";
-import { ArrowRight, ExternalLink, Github } from "lucide-react";
+import { ArrowRight, ExternalLink, Github, Link2, BookOpen, Globe, Code } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { absoluteUrl, localizedText } from "@/lib/portfolio/format";
 import { getDictionary, getLocale } from "@/lib/i18n";
-import type { Project } from "@/lib/portfolio/types";
+import type { Project, ProjectLink } from "@/lib/portfolio/types";
 
 export async function ProjectCard({ project }: { project: Project }) {
   const [t, locale] = await Promise.all([getDictionary(), getLocale()]);
@@ -16,11 +16,16 @@ export async function ProjectCard({ project }: { project: Project }) {
   return (
     <article className="group rounded-lg border border-white/10 bg-slate-900/70 p-5 shadow-2xl shadow-cyan-950/20 backdrop-blur transition duration-300 hover:-translate-y-1 hover:border-cyan-300/50">
       {coverUrl && (
-        <Link href={`/projects/${project.slug}`} className="mb-5 block overflow-hidden rounded-md">
+        <Link href={`/projects/${project.slug}`} className="mb-5 block overflow-hidden rounded-md relative aspect-video w-full bg-slate-950">
           <img
             src={coverUrl}
             alt=""
-            className="aspect-video w-full object-cover transition duration-500 group-hover:scale-105"
+            className="absolute inset-0 h-full w-full object-cover blur-md opacity-40 scale-110"
+          />
+          <img
+            src={coverUrl}
+            alt=""
+            className="relative h-full w-full object-contain object-center transition duration-500 group-hover:scale-105"
           />
         </Link>
       )}
@@ -71,6 +76,30 @@ export async function ProjectCard({ project }: { project: Project }) {
               <ExternalLink /> {t.common.demo}
             </a>
           </Button>
+        )}
+        {project.links && project.links.length > 0 && (
+          <>
+            {project.links.map((link: ProjectLink, index: number) => {
+              const url = absoluteUrl(link.url);
+              const label = localizedText({ ...link, label: link.label || '' }, "label", locale) ?? link.label ?? "";
+              const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
+                github: Github,
+                "link2": Link2,
+                "book-open": BookOpen,
+                globe: Globe,
+                code: Code,
+                external: ExternalLink,
+              };
+              const Icon = iconMap[link.icon || "link2"] || Link2;
+              return (
+                <Button asChild key={index} variant="outline" size="sm" className="border-white/10 bg-transparent text-slate-100">
+                  <a href={url ?? undefined} target="_blank" rel="noreferrer">
+                    <Icon /> {label}
+                  </a>
+                </Button>
+              );
+            })}
+          </>
         )}
       </div>
     </article>

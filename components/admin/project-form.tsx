@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { getDictionary } from "@/lib/i18n";
 import { createProject, updateProject } from "@/lib/portfolio/actions";
 import type { Project } from "@/lib/portfolio/types";
+import { LinksManager } from "./links-manager";
 
 export async function ProjectForm({ project }: { project?: Project | null }) {
   const t = await getDictionary();
@@ -15,7 +16,7 @@ export async function ProjectForm({ project }: { project?: Project | null }) {
         <Field name="slug" label={t.admin.fields.slug} defaultValue={project?.slug} />
         <Field name="cover_image_url" label={t.admin.fields.coverImageUrl} defaultValue={project?.cover_image_url} />
         <Field name="github_url" label={t.admin.fields.githubUrl} defaultValue={project?.github_url} />
-        <Field name="demo_url" label="Demo URL" defaultValue={project?.demo_url} />
+        <Field name="demo_url" label={t.locale === "vi" ? "Demo URL (Chính)" : "Demo URL (Primary)"} defaultValue={project?.demo_url} />
         <Field name="order_index" label={t.admin.fields.orderIndex} type="number" defaultValue={project?.order_index?.toString()} />
       </div>
 
@@ -43,6 +44,20 @@ export async function ProjectForm({ project }: { project?: Project | null }) {
       <LocalizedTextAreas
         vi={<TextArea name="lessons_learned_vi" label={`${t.admin.fields.lessonsLearned} (VI)`} defaultValue={project?.lessons_learned_vi ?? project?.lessons_learned} />}
         en={<TextArea name="lessons_learned_en" label={`${t.admin.fields.lessonsLearned} (EN)`} defaultValue={project?.lessons_learned_en ?? project?.lessons_learned} />}
+      />
+
+      <LinksManager
+        links={project?.links ?? []}
+        labels={{
+          links: t.admin.fields.links || "Links",
+          label: t.admin.fields.label || "Label",
+          url: "URL",
+          icon: "Icon",
+          deleteText: t.admin.delete || "Xóa",
+          addLinkText: t.admin.add === "Thêm" ? "Thêm link" : "Add link",
+          placeholderUrl: "https://github.com/user/repo",
+          placeholderLabel: t.admin.hints.list,
+        }}
       />
 
       <div className="flex gap-5">
@@ -127,3 +142,4 @@ function Check({
     </label>
   );
 }
+

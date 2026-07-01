@@ -49,7 +49,18 @@ export default async function BlogDetailPage({
           )}
           {excerpt && <p className="mt-5 whitespace-pre-line text-lg leading-8 text-slate-300">{excerpt}</p>}
           {coverUrl && (
-            <img src={coverUrl} alt="" className="my-10 aspect-video w-full rounded-lg object-cover" />
+            <div className="relative my-10 aspect-video w-full overflow-hidden rounded-lg bg-slate-950">
+              <img
+                src={coverUrl}
+                alt=""
+                className="absolute inset-0 h-full w-full object-cover blur-md opacity-40 scale-110"
+              />
+              <img
+                src={coverUrl}
+                alt=""
+                className="relative h-full w-full object-contain object-center"
+              />
+            </div>
           )}
           {content ? <Markdown content={content} /> : <p className="text-slate-400">{t.blog.noContent}</p>}
         </article>

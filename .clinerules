@@ -33,13 +33,73 @@ RTK filters and compresses command output before it reaches the LLM context, sav
 
 ---
 
+# Caveman Ecosystem (JuliusBrussee)
+
+## caveman - Output Compression (~75% fewer tokens)
+
+**Installed for Continue**. Also works with: Claude Code, Codex, Cursor, Windsurf, Cline, Copilot, etc.
+
+```bash
+/caveman [lite|full|ultra|wenyan]  # Compress agent replies
+/caveman-commit                     # Conventional commits, ≤50 char subject
+/caveman-review                     # One-line PR comments
+/caveman-stats                      # Token usage + lifetime savings + USD
+/caveman-compress <file>            # Rewrite memory files (CLAUDE.md) in caveman-speak
+caveman-shrink                      # MCP middleware for any MCP server
+```
+
+**Trigger**: Say "talk like caveman" or run `/caveman`. Stop with "normal mode".
+
+## cavemem - Cross-Agent Persistent Memory
+
+**Installed via npx**. Compresses observations with caveman grammar (~75% fewer tokens), stores in local SQLite, retrieves via MCP.
+
+```bash
+cavemem install --ide cline         # Install for Cline
+cavemem status                      # Wiring + DB counts + embedding backfill
+cavemem viewer                      # Open http://127.0.0.1:37777
+cavemem search <query>              # Search memory (BM25 + cosine re-rank)
+cavemem compress <file>             # Compress file with caveman grammar
+cavemem reindex                     # Rebuild FTS5 + vector index
+cavemem export <out.jsonl>          # Dump observations
+cavemem mcp                         # Start MCP server (stdio)
+```
+
+**Settings**: `~/.cavemem/settings.json` (compression intensity, embedding provider, search blend, privacy patterns)
+
+## caveman-code - Whole Terminal Agent (~2× fewer tokens than Codex)
+
+```bash
+npm install -g @juliusbrussee/caveman-code
+```
+
+---
+
+# Graphify - Knowledge Graph for Codebases
+
+**Installed via uv tool** (`graphify 0.9.3`)
+
+```bash
+graphify .                          # Build graph from current directory
+graphify query "question"           # Query the graph
+graphify path "A" "B"               # Find path between concepts
+graphify explain "Concept"          # Explain a node
+graphify export callflow-html       # Mermaid call-flow diagrams
+graphify install --platform cline   # Install skill for Cline
+graphify hook install               # Git hooks for auto-update
+graphify watch ./src                # Auto-sync as files change
+graphify add <url>                  # Add paper/video/doc to graph
+```
+
+**Outputs**: `graphify-out/graph.html`, `GRAPH_REPORT.md`, `graph.json`
+
+---
+
 # Headroom - Context Optimization Layer
 
 **Usage**: Context compression and token optimization for AI agents.
 
 ## Available Tools
-
-Headroom is installed and available. Use these commands for additional optimization:
 
 ```bash
 headroom proxy              # Start optimization proxy (port 8787)
@@ -74,5 +134,18 @@ Headroom provides additional compression beyond RTK:
 - CCR (reversible compression with retrieval)
 - Cross-agent memory
 
-For Cline, RTK handles shell output compression. Headroom is available for
-advanced use cases (proxy mode, memory, code analysis).
+For Cline, RTK handles shell output compression. Headroom is available for advanced use cases (proxy mode, memory, code analysis).
+
+---
+
+# Summary: Token Optimization Stack
+
+| Tool | What it compresses | Token savings | Installation |
+|------|-------------------|---------------|--------------|
+| **RTK** | Shell command output | 60-90% | Binary (`rtk`) - global ✓ |
+| **caveman** | Agent output/replies | ~75% | Skill (installed for Continue) |
+| **cavemem** | Cross-session memory | ~75% | npx `cavemem` - partial ✓ |
+| **graphify** | Codebase knowledge | Query-based | uv tool `graphify` - global ✓ |
+| **Headroom** | Full context (proxy) | 60-95% | Python pkg - available |
+
+**For Cline workflow**: RTK for shell commands + caveman for agent replies + graphify for codebase queries.

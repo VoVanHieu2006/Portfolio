@@ -13,6 +13,7 @@ import {
   absoluteUrl,
 } from "./format";
 import type { SupabaseClient } from "@supabase/supabase-js";
+import type { ProjectLink } from "./types";
 
 async function getSupabase(): Promise<SupabaseClient> {
   const supabase = await createClient();
@@ -115,6 +116,41 @@ function projectPayload(formData: FormData) {
     getString(formData, "title_en") ??
     getRequiredString(formData, "title");
   const slug = getString(formData, "slug") ?? sanitizeSlug(title);
+  
+  // Parse links from form data
+  const links: ProjectLink[] = [];
+  const formDataEntries = Array.from(formData.entries());
+  const linkGroups: Record<string, any> = {};
+  
+  // Group form data by link index
+  for (const [key, value] of formDataEntries) {
+    if (key.startsWith('links[')) {
+      const match = key.match(/links\[(\d+)\]\.(.+)/);
+      if (match) {
+        const index = parseInt(match[1]);
+        const field = match[2];
+        if (!linkGroups[index]) {
+          linkGroups[index] = {};
+        }
+        linkGroups[index][field] = value;
+      }
+    }
+  }
+  
+  // Convert grouped data to ProjectLink array
+  Object.keys(linkGroups).sort((a, b) => parseInt(a) - parseInt(b)).forEach(index => {
+    const group = linkGroups[parseInt(index)];
+    if (group.url || group.label) { // Only add if has url or label
+      links.push({
+        label: group.label || '',
+        label_vi: group.label_vi || undefined,
+        label_en: group.label_en || undefined,
+        url: group.url || '',
+        icon: group.icon || 'link2'
+      });
+    }
+  });
+
   return {
     slug,
     title,
@@ -144,6 +180,7 @@ function projectPayload(formData: FormData) {
     github_url: absoluteUrl(getString(formData, "github_url")),
     demo_url: absoluteUrl(getString(formData, "demo_url")),
     cover_image_url: absoluteUrl(getString(formData, "cover_image_url")),
+    links: links.length > 0 ? links : null,
     featured: isChecked(formData, "featured"),
     published: isChecked(formData, "published"),
     order_index: getNumber(formData, "order_index"),

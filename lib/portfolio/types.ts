@@ -18,6 +18,14 @@ export type SiteProfile = {
   updated_at?: string | null;
 };
 
+export type ProjectLink = {
+  label: string;
+  label_vi?: string;
+  label_en?: string;
+  url: string;
+  icon?: string;
+};
+
 export type Project = {
   id: string;
   slug: string;
@@ -46,6 +54,7 @@ export type Project = {
   github_url: string | null;
   demo_url: string | null;
   cover_image_url: string | null;
+  links: ProjectLink[] | null;
   featured: boolean;
   published: boolean;
   order_index: number | null;
