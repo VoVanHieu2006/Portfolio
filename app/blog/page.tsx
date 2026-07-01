@@ -13,12 +13,12 @@ export default async function BlogPage() {
   ]);
 
   return (
-    <main className="min-h-screen bg-slate-950">
+    <main className="min-h-screen bg-background">
       <SiteHeader profile={profile} />
       <PageFrame>
         <section className="mx-auto w-full max-w-6xl px-4 py-16">
-          <p className="text-sm uppercase tracking-[0.3em] text-violet-300">{t.blog.eyebrow}</p>
-          <h1 className="mt-4 text-4xl font-semibold text-white">{t.blog.title}</h1>
+          <p className="text-sm uppercase tracking-[0.3em] text-violet-600 dark:text-violet-300">{t.blog.eyebrow}</p>
+          <h1 className="mt-4 text-4xl font-semibold text-foreground">{t.blog.title}</h1>
           <div className="mt-10">
             {posts.length ? (
               <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">

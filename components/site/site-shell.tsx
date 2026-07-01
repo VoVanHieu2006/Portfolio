@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ThemeSwitcher } from "@/components/theme-switcher";
 import { LanguageSwitcher } from "@/components/language-switcher";
-import { Button } from "@/components/ui/button";
+import { NavLinks } from "@/components/site/nav-links";
 import { absoluteUrl, localizedText } from "@/lib/portfolio/format";
 import { getDictionary, getLocale } from "@/lib/i18n";
 import type { SiteProfile } from "@/lib/portfolio/types";
@@ -17,18 +17,12 @@ export async function SiteHeader({ profile }: { profile?: SiteProfile | null }) 
   ];
 
   return (
-    <header className="sticky top-0 z-40 border-b border-white/10 bg-slate-950/80 backdrop-blur-xl">
+    <header className="sticky top-0 z-40 border-b border-border bg-background/80 backdrop-blur-xl">
       <div className="mx-auto flex min-h-16 w-full max-w-6xl flex-wrap items-center justify-between gap-3 px-4 py-3">
-        <Link href="/" className="text-sm font-semibold text-white transition hover:text-cyan-300">
+        <Link href="/" className="text-sm font-semibold text-foreground transition hover:text-cyan-500">
           {displayName}
         </Link>
-        <nav className="order-3 flex w-full items-center gap-1 overflow-x-auto md:order-none md:w-auto">
-          {navItems.map((item) => (
-            <Button key={item.href} asChild variant="ghost" size="sm">
-              <Link href={item.href}>{item.label}</Link>
-            </Button>
-          ))}
-        </nav>
+        <NavLinks items={navItems} />
         <div className="flex items-center gap-2">
           <LanguageSwitcher locale={locale} compact />
           <ThemeSwitcher />
@@ -45,21 +39,21 @@ export async function SiteFooter({ profile }: { profile?: SiteProfile | null }) 
   const linkedinUrl = absoluteUrl(profile?.linkedin_url);
 
   return (
-    <footer className="border-t border-white/10 bg-slate-950">
-      <div className="mx-auto flex w-full max-w-6xl flex-col gap-3 px-4 py-8 text-sm text-slate-400 md:flex-row md:items-center md:justify-between">
+    <footer className="border-t border-border bg-background">
+      <div className="mx-auto flex w-full max-w-6xl flex-col gap-3 px-4 py-8 text-sm text-muted-foreground md:flex-row md:items-center md:justify-between">
         <p>© {new Date().getFullYear()} {displayName}</p>
         <div className="flex flex-wrap gap-4">
           {githubUrl && (
-            <a className="transition hover:text-cyan-300" href={githubUrl} target="_blank" rel="noreferrer">
+            <a className="transition hover:text-cyan-500" href={githubUrl} target="_blank" rel="noreferrer">
               {t.common.github}
             </a>
           )}
           {linkedinUrl && (
-            <a className="transition hover:text-cyan-300" href={linkedinUrl} target="_blank" rel="noreferrer">
+            <a className="transition hover:text-cyan-500" href={linkedinUrl} target="_blank" rel="noreferrer">
               {t.common.linkedin}
             </a>
           )}
-          {profile?.email && <span className="text-slate-300">{profile.email}</span>}
+          {profile?.email && <span className="text-foreground/80">{profile.email}</span>}
         </div>
       </div>
     </footer>
@@ -68,9 +62,9 @@ export async function SiteFooter({ profile }: { profile?: SiteProfile | null }) 
 
 export function EmptyState({ title, description }: { title: string; description: string }) {
   return (
-    <div className="rounded-lg border border-dashed border-white/15 bg-white/[0.03] p-8 text-center">
-      <h3 className="text-lg font-semibold text-white">{title}</h3>
-      <p className="mt-2 text-sm text-slate-400">{description}</p>
+    <div className="rounded-lg border border-dashed border-border bg-muted/30 p-8 text-center">
+      <h3 className="text-lg font-semibold text-foreground">{title}</h3>
+      <p className="mt-2 text-sm text-muted-foreground">{description}</p>
     </div>
   );
 }

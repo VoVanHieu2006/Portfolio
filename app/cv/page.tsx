@@ -21,19 +21,19 @@ export default async function CvPage({
   const resumeUrl = absoluteUrl(profile?.resume_url);
 
   return (
-    <main className="min-h-screen bg-slate-950">
+    <main className="min-h-screen bg-background">
       <SiteHeader profile={profile} />
       <PageFrame>
         <section className="mx-auto w-full max-w-5xl px-4 py-16">
-          <p className="text-sm uppercase tracking-[0.3em] text-cyan-300">{t.cv.eyebrow}</p>
-          <h1 className="mt-4 text-4xl font-semibold text-white">{t.cv.title}</h1>
-          <p className="mt-4 max-w-2xl text-slate-400">{t.cv.description}</p>
+          <p className="text-sm uppercase tracking-[0.3em] text-cyan-600 dark:text-cyan-300">{t.cv.eyebrow}</p>
+          <h1 className="mt-4 text-4xl font-semibold text-foreground">{t.cv.title}</h1>
+          <p className="mt-4 max-w-2xl text-muted-foreground">{t.cv.description}</p>
 
-          <div className="mt-10 overflow-hidden rounded-lg border border-white/10 bg-white/[0.04] shadow-2xl shadow-cyan-950/20">
-            <div className="flex flex-col gap-3 border-b border-white/10 p-4 md:flex-row md:items-center md:justify-between">
-              <h2 className="font-semibold text-white">{t.cv.previewTitle}</h2>
+          <div className="mt-10 overflow-hidden rounded-lg border border-border bg-card shadow-2xl shadow-cyan-950/10 dark:shadow-cyan-950/20">
+            <div className="flex flex-col gap-3 border-b border-border p-4 md:flex-row md:items-center md:justify-between">
+              <h2 className="font-semibold text-foreground">{t.cv.previewTitle}</h2>
               {resumeUrl && (
-                <Button asChild className="bg-cyan-400 text-slate-950 hover:bg-cyan-300">
+                <Button asChild className="bg-cyan-500 text-white hover:bg-cyan-400 dark:bg-cyan-400 dark:text-slate-950 dark:hover:bg-cyan-300">
                   <a href={resumeUrl} target="_blank" rel="noreferrer">
                     <Download /> {t.common.downloadCv}
                   </a>
@@ -44,33 +44,33 @@ export default async function CvPage({
               <CvPreview url={resumeUrl} />
             ) : (
               <div className="p-10 text-center">
-                <h3 className="text-lg font-semibold text-white">{t.cv.noResumeTitle}</h3>
-                <p className="mt-2 text-sm text-slate-400">{t.cv.noResumeDescription}</p>
+                <h3 className="text-lg font-semibold text-foreground">{t.cv.noResumeTitle}</h3>
+                <p className="mt-2 text-sm text-muted-foreground">{t.cv.noResumeDescription}</p>
               </div>
             )}
           </div>
 
-          <section className="mt-12 rounded-lg border border-white/10 bg-white/[0.05] p-6 backdrop-blur">
+          <section className="mt-12 rounded-lg border border-border bg-card p-6 backdrop-blur">
             <div className="max-w-2xl">
-              <h2 className="text-2xl font-semibold text-white">{t.cv.contactTitle}</h2>
-              <p className="mt-3 text-sm leading-6 text-slate-400">{t.cv.contactDescription}</p>
+              <h2 className="text-2xl font-semibold text-foreground">{t.cv.contactTitle}</h2>
+              <p className="mt-3 text-sm leading-6 text-muted-foreground">{t.cv.contactDescription}</p>
               {profile?.email && (
-                <p className="mt-3 rounded-md border border-white/10 bg-slate-950 px-3 py-2 text-sm text-slate-200">
+                <p className="mt-3 rounded-md border border-border bg-muted px-3 py-2 text-sm text-foreground/80">
                   {t.common.email}: {profile.email}
                 </p>
               )}
             </div>
             {sent === "1" && (
-              <p className="mt-5 rounded-md border border-cyan-300/30 bg-cyan-300/10 p-3 text-sm text-cyan-100">
+              <p className="mt-5 rounded-md border border-cyan-300/30 bg-cyan-300/10 p-3 text-sm text-cyan-700 dark:text-cyan-100">
                 {t.cv.sent}
               </p>
             )}
             <form action={createMessage} className="mt-6 grid gap-4">
               <div className="grid gap-4 md:grid-cols-2">
-                <input name="name" required placeholder={t.cv.name} className="w-full rounded-md border border-white/10 bg-slate-950 px-3 py-2 text-sm text-white outline-none focus:border-cyan-300" />
-                <input name="email" type="email" required placeholder={t.cv.email} className="w-full rounded-md border border-white/10 bg-slate-950 px-3 py-2 text-sm text-white outline-none focus:border-cyan-300" />
+                <input name="name" required placeholder={t.cv.name} className="w-full rounded-md border border-border bg-background px-3 py-2 text-sm text-foreground outline-none focus:border-cyan-500 dark:focus:border-cyan-300" />
+                <input name="email" type="email" required placeholder={t.cv.email} className="w-full rounded-md border border-border bg-background px-3 py-2 text-sm text-foreground outline-none focus:border-cyan-500 dark:focus:border-cyan-300" />
               </div>
-              <textarea name="message" required rows={7} placeholder={t.cv.message} className="w-full rounded-md border border-white/10 bg-slate-950 px-3 py-2 text-sm text-white outline-none focus:border-cyan-300" />
+              <textarea name="message" required rows={7} placeholder={t.cv.message} className="w-full rounded-md border border-border bg-background px-3 py-2 text-sm text-foreground outline-none focus:border-cyan-500 dark:focus:border-cyan-300" />
               <Button className="w-full bg-violet-500 text-white hover:bg-violet-400 md:w-fit">{t.cv.send}</Button>
             </form>
           </section>

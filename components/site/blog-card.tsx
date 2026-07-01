@@ -11,9 +11,9 @@ export async function BlogCard({ post }: { post: BlogPost }) {
   const tags = localizedList(post, "tags", locale);
 
   return (
-    <article className="group overflow-hidden rounded-lg border border-white/10 bg-white/[0.04] backdrop-blur transition duration-300 hover:-translate-y-1 hover:border-violet-300/40">
+    <article className="group overflow-hidden rounded-lg border border-border bg-card backdrop-blur transition duration-300 hover:-translate-y-1 hover:border-violet-500/40 dark:hover:border-violet-300/40">
       {coverUrl && (
-        <Link href={`/blog/${post.slug}`} className="block overflow-hidden relative aspect-video w-full bg-slate-950">
+        <Link href={`/blog/${post.slug}`} className="block overflow-hidden relative aspect-video w-full bg-muted">
           <img
             src={coverUrl}
             alt=""
@@ -27,19 +27,19 @@ export async function BlogCard({ post }: { post: BlogPost }) {
         </Link>
       )}
       <div className="p-5">
-        <p className="text-xs uppercase tracking-[0.2em] text-cyan-300">
+        <p className="text-xs uppercase tracking-[0.2em] text-cyan-600 dark:text-cyan-300">
           {formatDate(post.published_at ?? post.created_at, locale)}
         </p>
-        <h3 className="mt-3 text-xl font-semibold text-white">
-          <Link href={`/blog/${post.slug}`} className="transition hover:text-cyan-300">
+        <h3 className="mt-3 text-xl font-semibold text-foreground">
+          <Link href={`/blog/${post.slug}`} className="transition hover:text-cyan-500 dark:hover:text-cyan-300">
             {title}
           </Link>
         </h3>
-        {excerpt && <p className="mt-3 whitespace-pre-line text-sm leading-6 text-slate-300">{excerpt}</p>}
+        {excerpt && <p className="mt-3 whitespace-pre-line text-sm leading-6 text-muted-foreground">{excerpt}</p>}
         {tags.length > 0 && (
           <div className="mt-4 flex flex-wrap gap-2">
             {tags.map((tag) => (
-              <span key={tag} className="rounded-full border border-white/10 px-2 py-1 text-xs text-slate-300">
+              <span key={tag} className="rounded-full border border-border px-2 py-1 text-xs text-muted-foreground">
                 {tag}
               </span>
             ))}

@@ -30,26 +30,26 @@ export default async function BlogDetailPage({
   const tags = localizedList(post, "tags", locale);
 
   return (
-    <main className="min-h-screen bg-slate-950">
+    <main className="min-h-screen bg-background">
       <SiteHeader profile={profile} />
       <PageFrame>
         <article className="mx-auto w-full max-w-3xl px-4 py-16">
-          <p className="text-sm uppercase tracking-[0.25em] text-cyan-300">
+          <p className="text-sm uppercase tracking-[0.25em] text-cyan-600 dark:text-cyan-300">
             {formatDate(post.published_at ?? post.created_at, locale)}
           </p>
-          <h1 className="mt-4 text-4xl font-semibold leading-tight text-white">{title}</h1>
+          <h1 className="mt-4 text-4xl font-semibold leading-tight text-foreground">{title}</h1>
           {tags.length > 0 && (
             <div className="mt-5 flex flex-wrap gap-2">
               {tags.map((tag) => (
-                <span key={tag} className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-xs text-slate-300">
+                <span key={tag} className="rounded-full border border-border bg-muted px-3 py-1 text-xs text-muted-foreground">
                   {tag}
                 </span>
               ))}
             </div>
           )}
-          {excerpt && <p className="mt-5 whitespace-pre-line text-lg leading-8 text-slate-300">{excerpt}</p>}
+          {excerpt && <p className="mt-5 whitespace-pre-line text-lg leading-8 text-muted-foreground">{excerpt}</p>}
           {coverUrl && (
-            <div className="relative my-10 aspect-video w-full overflow-hidden rounded-lg bg-slate-950">
+            <div className="relative my-10 aspect-video w-full overflow-hidden rounded-lg bg-muted">
               <img
                 src={coverUrl}
                 alt=""
@@ -62,7 +62,7 @@ export default async function BlogDetailPage({
               />
             </div>
           )}
-          {content ? <Markdown content={content} /> : <p className="text-slate-400">{t.blog.noContent}</p>}
+          {content ? <Markdown content={content} /> : <p className="text-muted-foreground">{t.blog.noContent}</p>}
         </article>
       </PageFrame>
       <SiteFooter profile={profile} />

@@ -39,25 +39,25 @@ export default async function ProjectDetailPage({
   const keyFeatures = localizedList(project, "key_features", locale);
 
   return (
-    <main className="min-h-screen bg-slate-950">
+    <main className="min-h-screen bg-background">
       <SiteHeader profile={profile} />
       <PageFrame>
         <article className="mx-auto w-full max-w-5xl px-4 py-16">
-          <Button asChild variant="ghost" className="mb-8 text-cyan-200">
+          <Button asChild variant="ghost" className="mb-8 text-cyan-600 dark:text-cyan-200">
             <Link href="/projects"><ArrowLeft /> {t.common.backToProjects}</Link>
           </Button>
           <div className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr]">
             <div>
-              <p className="text-sm uppercase tracking-[0.25em] text-cyan-300">{t.projects.eyebrow}</p>
-              <h1 className="mt-4 text-4xl font-semibold leading-tight text-white">{title}</h1>
+              <p className="text-sm uppercase tracking-[0.25em] text-cyan-600 dark:text-cyan-300">{t.projects.eyebrow}</p>
+              <h1 className="mt-4 text-4xl font-semibold leading-tight text-foreground">{title}</h1>
               {shortDescription && (
-                <p className="mt-5 whitespace-pre-line text-lg leading-8 text-slate-300">
+                <p className="mt-5 whitespace-pre-line text-lg leading-8 text-muted-foreground">
                   {shortDescription}
                 </p>
               )}
               <div className="mt-6 flex flex-wrap gap-2">
                 {githubUrl && (
-                  <Button asChild variant="outline" className="border-white/10 bg-transparent text-white">
+                  <Button asChild variant="outline" className="border-border text-foreground">
                     <a href={githubUrl} target="_blank" rel="noreferrer"><Github /> {t.common.source}</a>
                   </Button>
                 )}
@@ -82,7 +82,7 @@ export default async function ProjectDetailPage({
                     };
                     const Icon = iconMap[link.icon || "link2"] || Link2;
                     return (
-                      <Button asChild key={index} variant="outline" className="border-white/10 bg-transparent text-white">
+                      <Button asChild key={index} variant="outline" className="border-border text-foreground">
                         <a href={url ?? undefined} target="_blank" rel="noreferrer">
                           <Icon /> {label}
                         </a>
@@ -93,7 +93,7 @@ export default async function ProjectDetailPage({
               )}
             </div>
             {coverUrl && (
-              <div className="relative aspect-video w-full overflow-hidden rounded-lg border border-white/10 bg-slate-950">
+              <div className="relative aspect-video w-full overflow-hidden rounded-lg border border-border bg-muted">
                 <img
                   src={coverUrl}
                   alt=""
@@ -132,9 +132,9 @@ function DetailBlock({ title, value }: { title: string; value: string | null }) 
   }
 
   return (
-    <section className="rounded-lg border border-white/10 bg-white/[0.04] p-5">
-      <h2 className="font-semibold text-white">{title}</h2>
-      <p className="mt-3 whitespace-pre-line text-sm leading-7 text-slate-300">{value}</p>
+    <section className="rounded-lg border border-border bg-card p-5">
+      <h2 className="font-semibold text-foreground">{title}</h2>
+      <p className="mt-3 whitespace-pre-line text-sm leading-7 text-muted-foreground">{value}</p>
     </section>
   );
 }
@@ -145,11 +145,11 @@ function ListBlock({ title, items }: { title: string; items: string[] }) {
   }
 
   return (
-    <section className="rounded-lg border border-white/10 bg-white/[0.04] p-5">
-      <h2 className="font-semibold text-white">{title}</h2>
+    <section className="rounded-lg border border-border bg-card p-5">
+      <h2 className="font-semibold text-foreground">{title}</h2>
       <div className="mt-3 flex flex-wrap gap-2">
         {items.map((item) => (
-          <span key={item} className="rounded-full bg-white/10 px-3 py-1 text-sm text-slate-200">
+          <span key={item} className="rounded-full bg-muted px-3 py-1 text-sm text-foreground/80">
             {item}
           </span>
         ))}

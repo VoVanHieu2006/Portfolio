@@ -14,9 +14,9 @@ export async function ProjectCard({ project }: { project: Project }) {
   const shortDescription = localizedText(project, "short_description", locale);
 
   return (
-    <article className="group rounded-lg border border-white/10 bg-slate-900/70 p-5 shadow-2xl shadow-cyan-950/20 backdrop-blur transition duration-300 hover:-translate-y-1 hover:border-cyan-300/50">
+    <article className="group rounded-lg border border-border bg-card p-5 shadow-lg transition duration-300 hover:-translate-y-1 hover:border-cyan-500/50 dark:shadow-cyan-950/20 dark:hover:border-cyan-300/50">
       {coverUrl && (
-        <Link href={`/projects/${project.slug}`} className="mb-5 block overflow-hidden rounded-md relative aspect-video w-full bg-slate-950">
+        <Link href={`/projects/${project.slug}`} className="mb-5 block overflow-hidden rounded-md relative aspect-video w-full bg-muted">
           <img
             src={coverUrl}
             alt=""
@@ -31,19 +31,19 @@ export async function ProjectCard({ project }: { project: Project }) {
       )}
       <div className="flex items-start justify-between gap-4">
         <div>
-          <h3 className="text-xl font-semibold text-white">
-            <Link href={`/projects/${project.slug}`} className="transition hover:text-cyan-300">
+          <h3 className="text-xl font-semibold text-foreground">
+            <Link href={`/projects/${project.slug}`} className="transition hover:text-cyan-500 dark:hover:text-cyan-300">
               {title}
             </Link>
           </h3>
           {shortDescription && (
-            <p className="mt-2 whitespace-pre-line text-sm leading-6 text-slate-300">
+            <p className="mt-2 whitespace-pre-line text-sm leading-6 text-muted-foreground">
               {shortDescription}
             </p>
           )}
         </div>
         {project.featured && (
-          <span className="inline-flex min-h-6 items-center justify-center rounded-full border border-cyan-300/40 px-3 py-1 text-center text-xs leading-none text-cyan-200">
+          <span className="inline-flex min-h-6 items-center justify-center rounded-full border border-cyan-500/40 px-3 py-1 text-center text-xs leading-none text-cyan-600 dark:border-cyan-300/40 dark:text-cyan-200">
             {t.projects.featured}
           </span>
         )}
@@ -51,20 +51,20 @@ export async function ProjectCard({ project }: { project: Project }) {
       {project.tech_stack && project.tech_stack.length > 0 && (
         <div className="mt-4 flex flex-wrap gap-2">
           {project.tech_stack.map((tech) => (
-            <span key={tech} className="rounded-full bg-white/10 px-3 py-1 text-xs text-slate-200">
+            <span key={tech} className="rounded-full bg-muted px-3 py-1 text-xs text-foreground/80">
               {tech}
             </span>
           ))}
         </div>
       )}
       <div className="mt-5 flex flex-wrap gap-2">
-        <Button asChild size="sm" className="bg-cyan-400 text-slate-950 hover:bg-cyan-300">
+        <Button asChild size="sm" className="bg-cyan-500 text-white hover:bg-cyan-400 dark:bg-cyan-400 dark:text-slate-950 dark:hover:bg-cyan-300">
           <Link href={`/projects/${project.slug}`}>
             {t.common.readMore} <ArrowRight />
           </Link>
         </Button>
         {githubUrl && (
-          <Button asChild variant="outline" size="sm" className="border-white/10 bg-transparent text-slate-100">
+          <Button asChild variant="outline" size="sm" className="border-border text-foreground">
             <a href={githubUrl} target="_blank" rel="noreferrer">
               <Github /> {t.common.source}
             </a>
@@ -92,7 +92,7 @@ export async function ProjectCard({ project }: { project: Project }) {
               };
               const Icon = iconMap[link.icon || "link2"] || Link2;
               return (
-                <Button asChild key={index} variant="outline" size="sm" className="border-white/10 bg-transparent text-slate-100">
+                <Button asChild key={index} variant="outline" size="sm" className="border-border text-foreground">
                   <a href={url ?? undefined} target="_blank" rel="noreferrer">
                     <Icon /> {label}
                   </a>

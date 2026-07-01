@@ -48,7 +48,7 @@ export function Markdown({ content }: { content: string }) {
 
   return (
     <div
-      className="prose prose-invert max-w-none prose-a:text-cyan-300 prose-code:rounded prose-code:bg-white/10 prose-code:px-1 prose-code:py-0.5 prose-pre:border prose-pre:border-white/10 prose-pre:bg-slate-950/80"
+      className="prose dark:prose-invert max-w-none prose-a:text-cyan-600 dark:prose-a:text-cyan-300 prose-code:rounded prose-code:bg-muted prose-code:px-1 prose-code:py-0.5 prose-pre:border prose-pre:border-border prose-pre:bg-muted"
       dangerouslySetInnerHTML={{ __html: html }}
     />
   );
