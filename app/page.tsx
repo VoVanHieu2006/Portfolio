@@ -25,9 +25,13 @@ export default async function Home() {
     getSkills(),
   ]);
   
-  // Filter skills vertically by their actual category instead of alternating them
-  const hardSkills = skills.filter((skill: any) => skill.category === "hard");
-  const softSkills = skills.filter((skill: any) => skill.category === "soft");
+  // Filter skills vertically by their actual category, supporting both legacy and new category names
+  const hardSkills = skills.filter(
+    (skill: any) => skill.category === "hard" || skill.category === "hard_skill"
+  );
+  const softSkills = skills.filter(
+    (skill: any) => skill.category === "soft" || skill.category === "soft_skill"
+  );
 
   const avatarUrl = absoluteUrl(profile?.avatar_url);
   const fullName = localizedText(profile, "full_name", locale) ?? t.home.fallbackName;
