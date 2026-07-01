@@ -2,14 +2,21 @@ import { Button } from "@/components/ui/button";
 import { AdminCard, AdminHeader } from "@/components/admin/admin-shell";
 import { getDictionary } from "@/lib/i18n";
 import { createSkill, deleteSkill, updateSkill } from "@/lib/portfolio/actions";
-import { getSkills, splitSkills } from "@/lib/portfolio/queries";
+import { getSkills } from "@/lib/portfolio/queries";
 import type { Skill } from "@/lib/portfolio/types";
 
 export const dynamic = "force-dynamic";
 
 export default async function AdminSkillsPage() {
   const [t, skills] = await Promise.all([getDictionary(), getSkills()]);
-  const grouped = splitSkills(skills);
+  
+  // Filter skills directly by category instead of using the buggy splitSkills helper
+  const hardSkills = skills.filter(
+    (skill) => skill.category === "hard" || skill.category === "hard_skill"
+  );
+  const softSkills = skills.filter(
+    (skill) => skill.category === "soft" || skill.category === "soft_skill"
+  );
 
   return (
     <>
@@ -19,13 +26,13 @@ export default async function AdminSkillsPage() {
           title={t.admin.skillOptions.hard}
           category="hard_skill"
           labels={t.admin}
-          skills={grouped[0]}
+          skills={hardSkills}
         />
         <SkillColumn
           title={t.admin.skillOptions.soft}
           category="soft_skill"
           labels={t.admin}
-          skills={grouped[1]}
+          skills={softSkills}
         />
       </div>
     </>
@@ -105,4 +112,3 @@ function SkillForm({
     </form>
   );
 }
-
