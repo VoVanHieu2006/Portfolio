@@ -94,7 +94,7 @@ export const dictionary = {
     cv: {
       eyebrow: "CV",
       title: "CV và liên hệ",
-      description: "Đọc CV trước, nếu thấy phù hợp thì gửi tin nhắn cho tôi ở phía dưới.",
+      description: "Đây là CV của tôi, nếu thấy phù hợp thì kết nối nhé",
       previewTitle: "CV Preview",
       noResumeTitle: "Chưa có CV",
       noResumeDescription: "Thêm đường dẫn CV trong trang quản trị. Link có thể là ảnh hoặc PDF công khai.",
