@@ -11,7 +11,6 @@ import {
   getLatestPosts,
   getSiteProfile,
   getSkills,
-  splitSkills,
 } from "@/lib/portfolio/queries";
 
 export const dynamic = "force-dynamic";
@@ -25,7 +24,11 @@ export default async function Home() {
     getLatestPosts(3),
     getSkills(),
   ]);
-  const groupedSkills = splitSkills(skills);
+  
+  // Filter skills vertically by their actual category instead of alternating them
+  const hardSkills = skills.filter((skill: any) => skill.category === "hard");
+  const softSkills = skills.filter((skill: any) => skill.category === "soft");
+
   const avatarUrl = absoluteUrl(profile?.avatar_url);
   const fullName = localizedText(profile, "full_name", locale) ?? t.home.fallbackName;
   const headline = localizedText(profile, "headline", locale) ?? t.home.fallbackHeadline;
@@ -118,8 +121,8 @@ export default async function Home() {
             <p className="text-sm uppercase tracking-[0.25em] text-cyan-300">{t.home.skillsEyebrow}</p>
             <h2 className="mt-2 text-2xl font-semibold text-white">{t.home.skillsTitle}</h2>
             <div className="mt-6 grid gap-5 md:grid-cols-2">
-              <SkillPreview title={t.home.hardSkills} skills={groupedSkills[0]} locale={locale} empty={t.home.noSkills} />
-              <SkillPreview title={t.home.softSkills} skills={groupedSkills[1]} locale={locale} empty={t.home.noSkills} />
+              <SkillPreview title={t.home.hardSkills} skills={hardSkills} locale={locale} empty={t.home.noSkills} />
+              <SkillPreview title={t.home.softSkills} skills={softSkills} locale={locale} empty={t.home.noSkills} />
             </div>
           </div>
         </section>
